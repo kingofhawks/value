@@ -21,7 +21,7 @@ import io
 
 api_home = 'http://xueqiu.com'
 # check xueqiu HTTP request cookie "xq_a_token"
-xq_a_token = '6fe724e8526b1fd63a6390936c5151137479dca9'
+xq_a_token = '433f3728a88ba1bbf6db050652d5368b21b61a9d'
 headers = {'content-type': 'application/json',
            'user-agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.124 Safari/537.36'}
 
@@ -53,9 +53,20 @@ def parse_stocks(access_token=xq_a_token):
     df = pd.DataFrame(stocks)
     cols = ['symbol', 'name']
     df = df.ix[:, cols]
-    print(df)
-    df.to_excel("output.xlsx", index=False)
+    # print(df)
+    # df.to_excel("output.xlsx", index=False)
+    return df
 
 
 if __name__ == '__main__':
-    parse_stocks()
+    df = parse_stocks()
+    print(df)
+    df_zz800 = pd.read_excel("D://workspace//value//中证800.xls")
+    print(df_zz800)
+    print(df_zz800.columns)
+    columns = ['symbol', 'name', 'a', 'b']
+    df_zz800.columns = columns
+    print(df_zz800)
+    # df_zz800.rename(index=str.lower, columns=str.upper)
+    df = df.merge(df_zz800, 'left', on='symbol')
+    print(df)
