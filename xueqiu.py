@@ -27,7 +27,7 @@ headers = {'content-type': 'application/json',
 
 
 # 雪球自选股清单
-def parse_stocks(access_token=xq_a_token):
+def get_self_select(access_token=xq_a_token):
     url = 'https://stock.xueqiu.com/v5/stock/portfolio/stock/list.json?size=1000&pid=-5&category=1'
     payload = {'access_token': access_token}
 
@@ -58,15 +58,36 @@ def parse_stocks(access_token=xq_a_token):
     return df
 
 
+def filter_(df1, df2):
+    df = df1.merge(df2, 'left', on='symbol')
+    print('*'*100)
+    print(df)
+    # 根据column查询
+    bad_df = df[df['annual_yield'] < 10]
+    print('@' * 100)
+    # print(df)
+    # 根据column排序
+    bad_df = bad_df.sort_values(by='annual_yield', ascending=False)
+    print(bad_df)
+
+    # 根据column查询
+    good_df = df[df['annual_yield'] > 15]
+    print('@' * 100)
+    # print(df)
+    # 根据column排序
+    good_df = good_df.sort_values(by='annual_yield', ascending=False)
+    print(good_df)
+
+
 if __name__ == '__main__':
-    df = parse_stocks()
+    df = get_self_select()
     print(df)
     df_zz800 = pd.read_excel("D://workspace//value//中证800.xls")
     print(df_zz800)
     print(df_zz800.columns)
-    columns = ['symbol', 'name', 'a', 'b']
+    columns = ['symbol', 'name', 'cumulative_returns', 'annual_yield']
     df_zz800.columns = columns
     print(df_zz800)
     # df_zz800.rename(index=str.lower, columns=str.upper)
-    df = df.merge(df_zz800, 'left', on='symbol')
+    df = filter_(df, df_zz800)
     print(df)
