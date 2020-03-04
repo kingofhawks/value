@@ -1,6 +1,5 @@
 # -*- coding:utf-8 -*-
 import re
-import pymongo
 from dateutil.tz import tzutc
 from lxml import etree
 from lxml.html import parse
@@ -10,9 +9,7 @@ import numpy as np
 import requests
 import json
 from datetime import timedelta, datetime
-import arrow
 from numpy import interp
-import tushare as ts
 from PyQt5 import Qt
 import sys
 import xlrd
