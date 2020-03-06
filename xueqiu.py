@@ -55,7 +55,7 @@ def get_self_select(access_token=xq_a_token):
     return df
 
 
-def filter_(df1, df2):
+def filter_(df1, df2, output):
     df = df1.merge(df2, 'left', on='symbol')
     print('*'*100)
     print(df)
@@ -67,13 +67,22 @@ def filter_(df1, df2):
     bad_df = bad_df.sort_values(by='annual_yield', ascending=False)
     print(bad_df)
 
-    # 根据column查询
-    good_df = df[df['annual_yield'] > 15]
+    # 根据column查询年化收益>10的
+    good_df = df[df['annual_yield'] > 10]
     print('@' * 100)
     # print(df)
     # 根据column排序
     good_df = good_df.sort_values(by='annual_yield', ascending=False)
     print(good_df)
+
+    # 根据column找到存在空值的
+    nan_df = good_df[good_df['name_y'].isnull()]
+    print('@' * 100)
+    # 根据column排序
+    nan_df = nan_df.sort_values(by='annual_yield', ascending=False)
+    print(nan_df)
+    if output:
+        nan_df.to_excel("output.xlsx", index=False)
 
 
 if __name__ == '__main__':
@@ -86,5 +95,7 @@ if __name__ == '__main__':
     df_zz800.columns = columns
     print(df_zz800)
     # df_zz800.rename(index=str.lower, columns=str.upper)
-    df = filter_(df, df_zz800)
-    print(df)
+    df2 = filter_(df, df_zz800, False)
+    print(df2)
+    df3 = filter_(df_zz800, df, True)
+    print(df3)
